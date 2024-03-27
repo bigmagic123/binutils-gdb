@@ -125,6 +125,7 @@
 #include "elf/metag.h"
 #include "elf/microblaze.h"
 #include "elf/mips.h"
+#include "elf/riscv.h"
 #include "elf/mmix.h"
 #include "elf/mn10200.h"
 #include "elf/mn10300.h"
@@ -1155,6 +1156,10 @@ dump_relocations (FILE * file,
 	case EM_MIPS:
 	case EM_MIPS_RS3_LE:
 	  rtype = elf_mips_reloc_type (type);
+	  break;
+
+	case EM_RISCV:
+	  rtype = elf_riscv_reloc_type (type);
 	  break;
 
 	case EM_ALPHA:
@@ -2647,6 +2652,14 @@ get_machine_flags (unsigned e_flags, unsigned e_machine)
 	    case E_MIPS_ARCH_64R2: strcat (buf, ", mips64r2"); break;
 	    default: strcat (buf, _(", unknown ISA")); break;
 	    }
+	  break;
+
+	case EM_RISCV:
+          {
+            unsigned int riscv_extension = EF_GET_RISCV_EXT(e_flags);
+            strcat (buf, ", ");
+            strcat (buf, riscv_elf_flag_to_name (riscv_extension));
+          }
 	  break;
 
 	case EM_SH:
